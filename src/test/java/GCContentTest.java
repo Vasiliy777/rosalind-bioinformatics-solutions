@@ -1,4 +1,3 @@
-import com.sun.xml.internal.ws.util.StringUtils;
 import org.assertj.core.data.Offset;
 import org.junit.Test;
 
