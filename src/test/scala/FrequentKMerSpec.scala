@@ -1,0 +1,32 @@
+import org.scalatest._
+
+class FrequentKMerSpec extends FlatSpec with Matchers {
+
+  "Frequent mers" should "be found in genome" in {
+    val genome: String = "ACGTTGCATGTCGCATGATGCATGAGAGCT"
+    val merLength: Int = 4
+    val m = mostFrequentKMers(genome,merLength)
+    println(m.reduce((a,b) => a+ " " + b))
+    assert(m.toSet === Set("CATG","GCAT"))
+  }
+
+  "Frequent mers from test" should "be found in genome" in {
+    val genome: String = "TGGCTCGTGCCTATTGGATGGCTCGGACCGTTTCGTTTTGGCTCGTTTCGTGCCCGTTTTATTGGACGTGCCCGTTTCGGACTATTGGATGGCTCGGACTATTGGATGGCTCGGACTGGCTCGTTTTATTGGACGTGCCTATTGGACGTGCCCGTTTTATTGGACGGACCGGACCGTGCCCGTGCCCGGACTGGCTTGGCTTATTGGACGGACTGGCTCGGACTGGCTTATTGGACGTGCCCGTGCCTGGCTTGGCTTGGCTCGTTTCGTGCCTATTGGATATTGGATATTGGATGGCTCGTTTTGGCTCGGACTGGCTTGGCTCGTGCCTATTGGATGGCTTATTGGATGGCTCGGACCGGACCGGACTGGCTTATTGGACGTTTCGTTTCGTGCCTATTGGACGTGCCCGTTTCGGACCGTTTCGTTTCGTGCCCGTTTTATTGGACGTGCCTGGCTTATTGGACGTTTTATTGGATGGCTCGTTTCGTGCCCGTTTCGGACCGTGCCTGGCTCGTGCCTATTGGACGTTTCGTGCCTGGCTTATTGGACGTGCCCGTGCCTGGCTCGGACCGGACCGGACCGGACCGTTTTATTGGACGTTTTATTGGACGGACTGGCTCGTTTCGTGCCCGGACCGTTTTATTGGACGTGCCTATTGGACGGACTGGCTCGTTTCGGACTATTGGACGTTTCGGACCGGACCGTGCCCGTTTCGTGCCCGTTTTGGCTCGTGCCCGGACCGTTTCGTTTTATTGGATATTGGATGGCTTATTGGACGTGCCCGTGCCTGGCTTATTGGATATTGGACGTTTTATTGGA"
+    val merLength: Int = 13
+    val m = mostFrequentKMers(genome,merLength)
+    println(m.reduce((a,b) => a+ " " + b))
+    assert(m.toSet === Set("TATTGGACGTGCC"))
+  }
+
+  def mostFrequentKMers(genome: String, merLength: Int): Iterable[String] = {
+    val frequencyMap: Map[String, Int] = genome.sliding(merLength).toList.groupBy(a => a).mapValues(_.size)
+    println(frequencyMap)
+
+    return allMaxBy(frequencyMap,_._2)
+  }
+
+
+  def allMaxBy(someMap: Map[String, Int], function: ((String, Int)) => Int): Iterable[String] = {
+    return someMap.groupBy(function).maxBy(_._1)._2.keys
+  }
+}

@@ -34,7 +34,7 @@ public class SubstringsTest {
     private List<Integer> getSubstringIndexes(String genome, String substring) {
 
         int indexOf = StringUtils.indexOf(genome, substring);
-        List<Integer> substringIndexes = new LinkedList<>();
+        List<Integer> substringIndexes = new LinkedList<Integer>();
         while(indexOf!=-1) {
             substringIndexes.add(++indexOf);
             indexOf = StringUtils.indexOf(genome,substring,indexOf);

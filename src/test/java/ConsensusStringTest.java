@@ -444,7 +444,7 @@ public class ConsensusStringTest {
 
     private String[] getGenomes(String input) {
         String[] split = StringUtils.split(input, ">");
-        List<String> result = new LinkedList<>();
+        List<String> result = new LinkedList<String>();
         for (int i = 0; i < split.length; i++) {
             String row = StringUtils.substringAfter(split[i],"\n").replaceAll("\n","");
 
@@ -454,7 +454,7 @@ public class ConsensusStringTest {
     }
 
     private String getNucleotideOutput(ProfileMatrix matrix) {
-        List<String> result = new ArrayList<>();
+        List<String> result = new ArrayList<String>();
         for (Map.Entry<Character, ProfileRow> profileRowEntry : matrix.getEntries()) {
             result.add(profileRowEntry.getKey() +": " + StringUtils.join(profileRowEntry.getValue().toIntList(), " "));
         }
@@ -471,7 +471,7 @@ public class ConsensusStringTest {
 
 
     private class ProfileMatrix {
-        private TreeMap<Character, ProfileRow> maps = new TreeMap<>();
+        private TreeMap<Character, ProfileRow> maps = new TreeMap<Character,ProfileRow>();
         private int length;
 
         public ProfileMatrix(int length) {
@@ -518,9 +518,9 @@ public class ConsensusStringTest {
         }
 
         public List<Map.Entry<Character, ProfileRow>> getEntries() {
-            List<Map.Entry<Character, ProfileRow>> result = new ArrayList<>();
+            List<Map.Entry<Character, ProfileRow>> result = new ArrayList<Map.Entry<Character, ProfileRow>>();
             for (Character character : maps.navigableKeySet()) {
-                result.add(new TreeMap.SimpleEntry<>(character,maps.get(character)));
+                result.add(new TreeMap.SimpleEntry<Character,ProfileRow>(character,maps.get(character)));
             }
             return result;
         }
@@ -528,7 +528,7 @@ public class ConsensusStringTest {
 
     private class ProfileRow {
 
-        Map<Integer, MutableInt> positionCounters = new HashMap<>();
+        Map<Integer, MutableInt> positionCounters = new HashMap<Integer,MutableInt>();
         private int length;
 
         public ProfileRow(int length) {
@@ -544,7 +544,7 @@ public class ConsensusStringTest {
         }
 
         public List<Integer> toIntList() {
-            List<Integer> result = new LinkedList<>();
+            List<Integer> result = new LinkedList<Integer>();
             for (int i = 0; i < length; i++) {
                  result.add(positionCounters.get(i).toInteger());
             }
