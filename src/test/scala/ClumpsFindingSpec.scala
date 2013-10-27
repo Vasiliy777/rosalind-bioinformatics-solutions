@@ -1,33 +1,36 @@
 import org.scalatest._
-import scala.collection.{GenSet, GenTraversableOnce}
+import scala.collection.{GenSeq, GenSet, GenTraversableOnce}
 
 
 class ClumpsFindingSpec extends FlatSpec with Matchers {
 
-  "indexes in window" should "be found" in {
-    assert(hasindexesWithinWindow(List(1,3,5),6,3) === true)
-    assert(hasindexesWithinWindow(List(1,6,11),4,2) === false)
+  val ANY: Int = 123
+
+  "indexes in clump" should "be always enclosed when only one needed to form a clump" in {
+    assert(indexesOfKmersAreEnclosedInTheClump(List(1,3),ANY,1,ANY) === true)
+  }
+  "indexes in clump" should "be enclosed when indexes are within clump size" in {
+    assert(indexesOfKmersAreEnclosedInTheClump(List(1,3),3,2,1) === true)
+  }
+  "indexes in clump" should "not be enclosed when indexes do not fit within clump" in {
+    assert(indexesOfKmersAreEnclosedInTheClump(List(1,11),10,2,1) === false)
+  }
+  "indexes in clump" should "not be enclosed when kmer length would go out of clump" in {
+    assert(indexesOfKmersAreEnclosedInTheClump(List(1,3),3,2,2) === false)
+  }
+  "indexes in clump" should "be enclosed in second clump" in {
+    assert(indexesOfKmersAreEnclosedInTheClump(List(1,11,13),3,2,1) === true)
   }
 
-  def hasindexesWithinWindow(indexes:List[Int], window: Int, howMany: Int): Boolean = {
-    indexes.sliding(howMany).count((list:List[Int]) => list.last-list.head < window) > 0
+  def indexesOfKmersAreEnclosedInTheClump(indexes:List[Int], clumpSize: Int, howManyToFormAClump: Int, kmerLength:Int): Boolean = {
+    indexes.sliding(howManyToFormAClump).count((list:List[Int]) => list.last-list.head <= clumpSize-kmerLength) > 0
   }
 
   def allClumps(genome: String, kmerLength: Int, clumpSize: Int, howManyToFormAClump: Int):GenTraversableOnce[String] = {
-    println(genome.sliding(kmerLength).toList)
-    println(genome.sliding(kmerLength).toList.zipWithIndex)
-    println(genome.sliding(kmerLength).toList.zipWithIndex.groupBy(_._1))
-    println(genome.sliding(kmerLength).toList.zipWithIndex.groupBy(_._1).filter(_._2.size >= howManyToFormAClump))
-    println(genome.sliding(kmerLength).toList.zipWithIndex.groupBy(_._1).filter(_._2.size >= howManyToFormAClump)
-    .filter(pair => {
-      hasindexesWithinWindow(pair._2.unzip._2, clumpSize,howManyToFormAClump)
-    }))
-    val result: Map[String, Int] = genome.sliding(kmerLength).toList.zipWithIndex.groupBy(_._1).filter(_._2.size >= howManyToFormAClump)
+    val result = genome.sliding(kmerLength).filter(_.size == kmerLength).toList.zipWithIndex.groupBy(_._1).filter(_._2.size >= howManyToFormAClump)
       .filter(pair => {
-      hasindexesWithinWindow(pair._2.unzip._2, clumpSize, howManyToFormAClump)
-    }).mapValues(_.size)
-    println(result)
-
+      indexesOfKmersAreEnclosedInTheClump(pair._2.unzip._2, clumpSize, howManyToFormAClump,kmerLength)
+    })
     return result.keySet
   }
 
@@ -39,7 +42,7 @@ class ClumpsFindingSpec extends FlatSpec with Matchers {
 
     val clumps = allClumps(genome,kmerLength,clumpSize,howManyToFormAClump)
 
-    assert(clumps.toSet === Set("CGACA", "GAAGA"))
+    assert(clumps === Set("CGACA", "GAAGA"))
   }
 
   "test case" should "be found" in {
@@ -50,9 +53,22 @@ class ClumpsFindingSpec extends FlatSpec with Matchers {
 
     val clumps = allClumps(genome,kmerLength,clumpSize,howManyToFormAClump)
 
-    val clumpsSet: GenSet[String] = clumps.toSet
-    assert(clumpsSet === Set("GCAGGAATG", "AGGAATGGC", "ATGGCAGGA", "GCGGTCAAA", "TGGCAGGAA", "ACGCCACGA", "CACGACGCC", "GCCACGACG", "GGCAGGAAT", "CGACGCCAC", "CAGGAATGG", "CGCCACGAC", "AATGGCAGG", "GACGCCACG", "TATAGCCTC", "GAATGGCAG", "GGAATGGCA", "ACGACGCCA", "CCACGACGC"))
+    assert(clumps === Set("GCAGGAATG", "AGGAATGGC", "ATGGCAGGA", "GCGGTCAAA", "TGGCAGGAA", "ACGCCACGA", "CACGACGCC", "GCCACGACG", "GGCAGGAAT", "CGACGCCAC", "CAGGAATGG", "CGCCACGAC", "AATGGCAGG", "GACGCCACG", "TATAGCCTC", "GAATGGCAG", "GGAATGGCA", "ACGACGCCA", "CCACGACGC"))
   }
+
+  def readFrom(fileName: String) = scala.io.Source.fromFile(getClass.getResource(fileName).toURI).mkString
+
+  "E coli genome" should "find frequent k mers" in {
+    val genome = readFrom("E-coli.txt")
+    val kmerLength = 9
+    val clumpSize = 500
+    val howManyToFormAClump = 3
+
+    val clumps = allClumps(genome,kmerLength,clumpSize,howManyToFormAClump)
+
+    assert(clumps.size === 1904) //as of https://beta.stepic.org/Bioinformatics-Algorithms-2/An-Explosion-of-Hidden-Messages-4/#step-5
+  }
+
 
 }
 
