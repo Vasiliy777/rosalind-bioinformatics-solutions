@@ -27,7 +27,7 @@ class ClumpsFindingSpec extends FlatSpec with Matchers {
   }
 
   def allClumps(genome: String, kmerLength: Int, clumpSize: Int, howManyToFormAClump: Int):GenTraversableOnce[String] = {
-    val result = genome.sliding(kmerLength).filter(_.size == kmerLength).toList.zipWithIndex.groupBy(_._1).filter(_._2.size >= howManyToFormAClump)
+    val result = genome.sliding(kmerLength).toList.zipWithIndex.groupBy(_._1).filter(_._2.size >= howManyToFormAClump)
       .filter(pair => {
       indexesOfKmersAreEnclosedInTheClump(pair._2.unzip._2, clumpSize, howManyToFormAClump,kmerLength)
     })
