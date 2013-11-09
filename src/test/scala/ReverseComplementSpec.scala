@@ -28,7 +28,7 @@ class ReverseComplementSpec extends FlatSpec with Matchers {
   }
 
   def reverseComplement(genome:String): String = {
-      return genome.foldRight("")((nucleotide:Char,reversed:String) => reversed + reverseNucleotide(nucleotide));
+      return genome.reverse.foldRight("")((nucleotide:Char,reversed:String) => reversed + reverseNucleotide(nucleotide));
   }
 
 }
