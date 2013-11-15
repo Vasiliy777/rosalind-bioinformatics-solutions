@@ -12,11 +12,7 @@ class RNA(val direction:DNADirection, val genome:String) {
   }
 
   def toProteinString():String = {
-    genome.sliding(3,3).map(codon => if (codon.length == 3) new Codons().codonToAmino(codon).letter else "").mkString("").trim()
-  }
-
-  def toProteinShortcutString():String = {
-    genome.sliding(3,3).map(codon => if (codon.length == 3) new Codons().codonToAmino(codon).shortcut else "").mkString("").trim()
+    toProtein.aminoAcids.map(_.letter).mkString("").trim
   }
 
 }
