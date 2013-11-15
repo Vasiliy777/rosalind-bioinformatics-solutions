@@ -1,5 +1,6 @@
 import org.scalatest._
 import scala.collection.mutable
+import utils.ReadFrom
 
 
 class MinimizeSkewSpec extends FlatSpec with Matchers with ReadFrom {

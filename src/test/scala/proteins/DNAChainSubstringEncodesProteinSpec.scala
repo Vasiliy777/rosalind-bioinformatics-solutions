@@ -4,8 +4,9 @@ package proteins
 import org.scalatest.{Matchers, FlatSpec}
 import org.assertj.core.api.Assertions
 import scala.collection.JavaConverters._
+import utils.ReadFrom
 
-class DNAChainSubstringEncodesProteinSpec extends FlatSpec with Matchers {
+class DNAChainSubstringEncodesProteinSpec extends FlatSpec with Matchers with ReadFrom  {
 
   "DNA" should "contain subgenomes that encodes protein - example" in {
     val genome: String = "ATGGCCATGGCCCCCAGAACTGAGATCAATAGTACCCGTATTAACGGGTGA"
@@ -54,28 +55,36 @@ class DNAChainSubstringEncodesProteinSpec extends FlatSpec with Matchers {
 
     val substrings: Iterator[String] = getAllSubstringsEncodingProtein(genome, protein)
 
-    println(substrings.mkString("\n"))
     Assertions.assertThat(substrings.asJava).containsOnly(
-      "AAGGAAGTATTTGAGCCTCATTATTAC",
-      "AAAGAGGTGTTTGAACCTCATTACTAT",
-      "AAGGAGGTATTTGAACCCCACTATTAC",
-      "AAAGAAGTTTTCGAACCACATTATTAC",
-      "AAGGAAGTGTTTGAACCTCACTATTAT",
-      "AAAGAAGTTTTCGAGCCGCACTACTAC",
-      "AAGGAAGTATTCGAACCACATTACTAT",
-      "ATAATAATGCGGCTCGAATACTTCCTT",
-      "GTAGTAATGGGGCTCGAAAACCTCCTT",
-      "GTAGTAATGAGGTTCAAAAACCTCCTT",
-      "GTAGTAATGGGGTTCGAAGACTTCCTT",
-      "ATAATAGTGAGGCTCAAAAACTTCCTT",
-      "ATAGTAATGGGGTTCGAAGACTTCCTT",
-      "GTAGTAGTGCGGCTCAAAAACTTCCTT",
-      "ATAGTAATGAGGTTCGAAAACCTCTTT",
-      "ATAATAATGTGGCTCGAACACTTCTTT",
-      "GTAGTAATGGGGCTCAAACACCTCTTT",
-      "ATAGTAGTGAGGTTCGAAGACTTCCTT",
-      "GTAATAGTGCGGTTCAAAAACTTCCTT",
-      "ATAGTAGTGTGGTTCAAATACCTCCTT")
+      "CGGGTCATCCCCAATAATGAAGAAACG",
+      "CGTTTCCTCGTTATTGGGAATAACCCG",
+      "TGTCTCTTCGTTGTTTGGAATGACGCG",
+      "AGAGTGATACCAAATAATGAAGAGACG",
+      "CGCGTAATCCCAAACAATGAAGAGACG",
+      "CGTTTCCTCGTTATTCGGGATGACCCG",
+      "CGAGTGATCCCTAACAACGAAGAGACT",
+      "CGTGTTATCCCTAACAACGAGGAAACG",
+      "CGCGTCATCCCCAATAATGAGGAAACC",
+      "CGTTTCCTCATTATTTGGAATTACGCG",
+      "CGTCTCCTCGTTATTTGGAATTACACG",
+      "CGTGTCATCCCGAACAATGAGGAGACG",
+      "GGTCTCCTCGTTATTGGGTATCACCCT",
+      "CGGGTCATCCCAAATAATGAGGAAACA",
+      "CGGGTGATACCGAATAACGAAGAAACT",
+      "CGTCTCTTCATTGTTGGGGATTACACG",
+      "CGCGTTATCCCTAACAACGAAGAGACC",
+      "CGCGTAATACCAAATAATGAGGAGACA",
+      "GGTTTCTTCGTTGTTTGGTATCACTCG")
+  }
+
+  "DNA of Bacilius brevis" should "contain subgenomes that encodes yrocidine B1 (Val-Lys-Leu-Phe-Pro-Trp-Phe-Asn-Gln-Tyr)" in {
+    val genome: String = readFrom("B_brevis.txt")
+    val protein:String = "VKLFPWFNQY";
+
+    val substrings: Iterator[String] = getAllSubstringsEncodingProtein(genome, protein)
+
+    println(substrings.mkString("\n"))
+    assert(substrings.isEmpty)
   }
 
   def getAllSubstringsEncodingProtein(genome: String, protein: String):Iterator[String] = {

@@ -4,6 +4,7 @@ class Codons {
 
   def codonToAmino(codon:String ) = {
     codon match  {
+
       case "UUU" => new AminoAcid(codon,"Phenylalanine"	, "Phe" ,"F")
       case "UUC" => new AminoAcid(codon,"Phenylalanine"	, "Phe" ,"F")
       case "UUA" => new AminoAcid(codon,"Leucine	     ", "Leu" ,"L")
