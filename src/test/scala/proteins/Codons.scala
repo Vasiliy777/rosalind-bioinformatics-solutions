@@ -1,3 +1,5 @@
+package proteins
+
 /**
  * Created with IntelliJ IDEA.
  * User: tomasz
