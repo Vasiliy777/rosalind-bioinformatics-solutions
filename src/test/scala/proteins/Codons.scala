@@ -1,80 +1,73 @@
 package proteins
 
-/**
- * Created with IntelliJ IDEA.
- * User: tomasz
- * Date: 11/13/13
- * Time: 12:52 AM
- * To change this template use File | Settings | File Templates.
- */
 class Codons {
 
   def codonToAmino(codon:String ) = {
     codon match  {
-    case "AAA" => "K"
-    case "AAC" => "N"
-    case "AAG" => "K"
-    case "AAU" => "N"
-    case "ACA" => "T"
-    case "ACC" => "T"
-    case "ACG" => "T"
-    case "ACU" => "T"
-    case "AGA" => "R"
-    case "AGC" => "S"
-    case "AGG" => "R"
-    case "AGU" => "S"
-    case "AUA" => "I"
-    case "AUC" => "I"
-    case "AUG" => "M"
-    case "AUU" => "I"
-    case "CAA" => "Q"
-    case "CAC" => "H"
-    case "CAG" => "Q"
-    case "CAU" => "H"
-    case "CCA" => "P"
-    case "CCC" => "P"
-    case "CCG" => "P"
-    case "CCU" => "P"
-    case "CGA" => "R"
-    case "CGC" => "R"
-    case "CGG" => "R"
-    case "CGU" => "R"
-    case "CUA" => "L"
-    case "CUC" => "L"
-    case "CUG" => "L"
-    case "CUU" => "L"
-    case "GAA" => "E"
-    case "GAC" => "D"
-    case "GAG" => "E"
-    case "GAU" => "D"
-    case "GCA" => "A"
-    case "GCC" => "A"
-    case "GCG" => "A"
-    case "GCU" => "A"
-    case "GGA" => "G"
-    case "GGC" => "G"
-    case "GGG" => "G"
-    case "GGU" => "G"
-    case "GUA" => "V"
-    case "GUC" => "V"
-    case "GUG" => "V"
-    case "GUU" => "V"
-    case "UAA" => " "
-    case "UAC" => "Y"
-    case "UAG" => " "
-    case "UAU" => "Y"
-    case "UCA" => "S"
-    case "UCC" => "S"
-    case "UCG" => "S"
-    case "UCU" => "S"
-    case "UGA" => " "
-    case "UGC" => "C"
-    case "UGG" => "W"
-    case "UGU" => "C"
-    case "UUA" => "L"
-    case "UUC" => "F"
-    case "UUG" => "L"
-    case "UUU" => "F"
+      case "UUU" => new AminoAcid("Phenylalanine"	, "Phe" ,"F")
+      case "UUC" => new AminoAcid("Phenylalanine"	, "Phe" ,"F")
+      case "UUA" => new AminoAcid("Leucine	     ", "Leu" ,"L")
+      case "UUG" => new AminoAcid("Leucine	     ", "Leu" ,"L")
+      case "UCU" => new AminoAcid("Serine	       ", "Ser" ,"S")
+      case "UCC" => new AminoAcid("Serine	       ", "Ser" ,"S")
+      case "UCA" => new AminoAcid("Serine	       ", "Ser" ,"S")
+      case "UCG" => new AminoAcid("Serine	       ", "Ser" ,"S")
+      case "UAU" => new AminoAcid("Tyrosine	     ", "Tyr" ,"Y")
+      case "UAC" => new AminoAcid("Tyrosine	     ", "Tyr" ,"Y")
+      case "UAA" => new AminoAcid("Termination (ochre)", "XXX" ," "	)
+      case "UAG" => new AminoAcid("Termination (amber)", "XXX" ," "	)
+      case "UGU" => new AminoAcid("Cysteine	     ", "Cys" ,"C")
+      case "UGC" => new AminoAcid("Cysteine	     ", "Cys" ,"C")
+      case "UGA" => new AminoAcid("Termination (opal or umber)", "XXX" ," ")
+      case "UGG" => new AminoAcid("Tryptophan	   ", "Trp" ,"W")
+      case "CUU" => new AminoAcid("Leucine	     ", "Leu" ,"L")
+      case "CUC" => new AminoAcid("Leucine	     ", "Leu" ,"L")
+      case "CUA" => new AminoAcid("Leucine	     ", "Leu" ,"L")
+      case "CUG" => new AminoAcid("Leucine	     ", "Leu" ,"L")
+      case "CCU" => new AminoAcid("Proline	     ", "Pro" ,"P")
+      case "CCC" => new AminoAcid("Proline	     ", "Pro" ,"P")
+      case "CCA" => new AminoAcid("Proline	     ", "Pro" ,"P")
+      case "CCG" => new AminoAcid("Proline	     ", "Pro" ,"P")
+      case "CAU" => new AminoAcid("Histidine	   ", "His" ,"H")
+      case "CAC" => new AminoAcid("Histidine	   ", "His" ,"H")
+      case "CAA" => new AminoAcid("Glutamine	   ", "Gln" ,"Q")
+      case "CAG" => new AminoAcid("Glutamine	   ", "Gln" ,"Q")
+      case "CGU" => new AminoAcid("Arginine	     ", "Arg" ,"R")
+      case "CGC" => new AminoAcid("Arginine	     ", "Arg" ,"R")
+      case "CGA" => new AminoAcid("Arginine	     ", "Arg" ,"R")
+      case "CGG" => new AminoAcid("Arginine	     ", "Arg" ,"R")
+      case "AUU" => new AminoAcid("Isoleucine	   ", "Ile" ,"I")
+      case "AUC" => new AminoAcid("Isoleucine	   ", "Ile" ,"I")
+      case "AUA" => new AminoAcid("Isoleucine	   ", "Ile" ,"I")
+      case "AUG" => new AminoAcid("Methionine	   ", "Met" ,"M")
+      case "ACU" => new AminoAcid("Threonine	   ", "Thr" ,"T")
+      case "ACC" => new AminoAcid("Threonine	   ", "Thr" ,"T")
+      case "ACA" => new AminoAcid("Threonine	   ", "Thr" ,"T")
+      case "ACG" => new AminoAcid("Threonine	   ", "Thr" ,"T")
+      case "AAU" => new AminoAcid("Asparagine	   ", "Asn" ,"N")
+      case "AAC" => new AminoAcid("Asparagine	   ", "Asn" ,"N")
+      case "AAA" => new AminoAcid("Lysine	       ", "Lys" ,"K")
+      case "AAG" => new AminoAcid("Lysine	       ", "Lys" ,"K")
+      case "AGU" => new AminoAcid("Serine	       ", "Ser" ,"S")
+      case "AGC" => new AminoAcid("Serine	       ", "Ser" ,"S")
+      case "AGA" => new AminoAcid("Arginine	     ", "Arg" ,"R")
+      case "AGG" => new AminoAcid("Arginine	     ", "Arg" ,"R")
+      case "GUU" => new AminoAcid("Valine	       ", "Val" ,"V")
+      case "GUC" => new AminoAcid("Valine	       ", "Val" ,"V")
+      case "GUA" => new AminoAcid("Valine	       ", "Val" ,"V")
+      case "GUG" => new AminoAcid("Valine	       ", "Val" ,"V")
+      case "GCU" => new AminoAcid("Alanine	     ", "Ala" ,"A")
+      case "GCC" => new AminoAcid("Alanine	     ", "Ala" ,"A")
+      case "GCA" => new AminoAcid("Alanine	     ", "Ala" ,"A")
+      case "GCG" => new AminoAcid("Alanine	     ", "Ala" ,"A")
+      case "GAU" => new AminoAcid("Aspartate	   ", "Asp" ,"D")
+      case "GAC" => new AminoAcid("Aspartate	   ", "Asp" ,"D")
+      case "GAA" => new AminoAcid("Glutamate	   ", "Glu" ,"E")
+      case "GAG" => new AminoAcid("Glutamate	   ", "Glu" ,"E")
+      case "GGU" => new AminoAcid("Glycine	     ", "Gly" ,"G")
+      case "GGC" => new AminoAcid("Glycine	     ", "Gly" ,"G")
+      case "GGA" => new AminoAcid("Glycine	     ", "Gly" ,"G")
+      case "GGG" => new AminoAcid("Glycine	     ", "Gly" ,"G")
     }
   }
 }
