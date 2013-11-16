@@ -44,6 +44,13 @@ class CyclopeptidesForSpectrum_Imperative_Spec extends FlatSpec with Matchers wi
     )
   }
 
+  "Peptides" should "be found for spectrum - test case" in {
+    val spectrum = List(0, 113, 113, 114, 115, 128, 128, 131, 137, 227, 241, 241, 243, 246, 250, 251, 259, 355, 356, 364, 364, 372, 374, 374, 378, 470, 477, 487, 487, 492, 492, 502, 509, 601, 605, 605, 607, 615, 615, 623, 624, 720, 728, 729, 733, 736, 738, 738, 752, 842, 848, 851, 851, 864, 865, 866, 866, 979)
+    println(peptidesForSpectrum(spectrum).map(_.mkString("-")).mkString(" "))
+    val expected = "113-114-137-113-128-131-115-128 113-128-115-131-128-113-137-114 113-128-131-115-128-113-114-137 113-137-114-113-128-115-131-128 114-113-128-115-131-128-113-137 114-137-113-128-131-115-128-113 115-128-113-114-137-113-128-131 115-131-128-113-137-114-113-128 128-113-114-137-113-128-131-115 128-113-137-114-113-128-115-131 128-115-131-128-113-137-114-113 128-131-115-128-113-114-137-113 131-115-128-113-114-137-113-128 131-128-113-137-114-113-128-115 137-113-128-131-115-128-113-114 137-114-113-128-115-131-128-113"
+    Assertions.assertThat(peptidesForSpectrum(spectrum).map(_.mkString("-")).asJava).containsOnly(expected.split(" "):_*)
+  }
+
   def peptidesForSpectrum(spectrum:List[Int]) = {
     val possibleMasses = originalMasses.intersect(spectrum)
     var candidates = scala.collection.mutable.MutableList(possibleMasses.map((a:Int) => List(a)).toArray :_*)
