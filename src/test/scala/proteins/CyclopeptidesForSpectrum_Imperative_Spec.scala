@@ -53,31 +53,20 @@ class CyclopeptidesForSpectrum_Imperative_Spec extends FlatSpec with Matchers wi
 
   def peptidesForSpectrum(spectrum:List[Int]) = {
     val possibleMasses = originalMasses.intersect(spectrum)
-    var candidates = scala.collection.mutable.MutableList(possibleMasses.map((a:Int) => List(a)).toArray :_*)
-    var result:List[List[Int]] = List()
+    var candidates = scala.collection.mutable.MutableList(possibleMasses.map((mass:Int) => new Candidate(List(mass))).toArray :_*)
+    var result:List[Candidate] = List()
     while (candidates.nonEmpty) {
       val candidate = candidates.head
-      if (isSubspectrum(candidate, spectrum)) {
-        if (isSpectrum(candidate,spectrum.tail)) {
+      if (candidate.isSubspectrum(spectrum)) {
+        if (candidate.isSpectrum(spectrum.tail)) {
           result = candidate :: result
         } else {
-          candidates.++=(possibleMasses.map(candidate :+ _).toList)
+          candidates.++=(possibleMasses.map(candidate.append(_)).toList)
         }
       }
       candidates = candidates.tail
     }
-    result
+    result.map(_.asList)
   }
-
-  def isSubspectrum(candidate:List[Int],spectrum:List[Int]):Boolean = candidate.sum<=spectrum.last &&
-    (for (i <- 1 to candidate.length; combination <- candidate.sliding(i)) yield(combination.sum)).toSet.subsetOf(spectrum.toSet)
-
-  def isSpectrum(candidate:List[Int],spectrum:List[Int]):Boolean = {
-    (candidate.sum == spectrum.last) && {
-      val all = (for (i <- 1 to candidate.length; combination <- candidate.union(candidate).sliding(i)) yield(combination.sum)).toSet
-      all.subsetOf(spectrum.toSet) && spectrum.toSet.subsetOf(all.toSet)
-    }
-  }
-
 
 }
