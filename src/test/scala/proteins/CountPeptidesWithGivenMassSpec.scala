@@ -18,7 +18,7 @@ class CountPeptidesWithGivenMassSpec extends FlatSpec with Matchers with ReadFro
   "Count of peptides" should "be found for given mass - text case " in {
     val mass = 1222L
 
-    Assertions.assertThat(countPeptidesFor(mass)).isEqualTo(14712706211L)
+    Assertions.assertThat(countPeptidesFor(mass)).isEqualTo(3338166505936L)
   }
 
   "Count of peptides" should "be found for given mass - simplest" in {
