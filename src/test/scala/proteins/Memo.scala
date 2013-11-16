@@ -1,0 +1,6 @@
+package proteins
+
+
+class Memo {
+
+}
