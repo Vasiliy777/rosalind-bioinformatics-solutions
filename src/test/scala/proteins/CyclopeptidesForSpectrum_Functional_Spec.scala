@@ -49,31 +49,40 @@ class CyclopeptidesForSpectrum_Functional_Spec extends FlatSpec with Matchers wi
     Assertions.assertThat(peptidesForSpectrum(spectrum).map(_.mkString("-")).asJava).containsOnly(expected.split(" "):_*)
   }
 
-  def isSubspectrum(candidate:List[Int],spectrum:List[Int]):Boolean = candidate.sum<=spectrum.last &&
+  def isSubspectrum(candidate:Candidate,spectrum:List[Int]):Boolean = candidate.sum<=spectrum.last &&
     (for (i <- 1 to candidate.length; combination <- candidate.sliding(i)) yield(combination.sum)).toSet.subsetOf(spectrum.toSet)
 
-  def isSpectrum(candidate:List[Int],spectrum:List[Int]):Boolean = {
+  def isSpectrum(candidate:Candidate,spectrum:List[Int]):Boolean = {
     (candidate.sum == spectrum.last) && {
-      val all = (for (i <- 1 to candidate.length; combination <- candidate.union(candidate).sliding(i)) yield(combination.sum)).toSet
+      val all = (for (i <- 1 to candidate.length; combination <- candidate.cyclicSliding(i)) yield(combination.sum)).toSet
       all.subsetOf(spectrum.toSet) && spectrum.toSet.subsetOf(all.toSet)
     }
   }
 
-  def peptidesForSpectrum(spectrum:List[Int]) = {
-    val possibleMasses = originalMasses.intersect(spectrum)
-    val initialCandidates = possibleMasses.map((a:Int) => List(a))
-    possiblePeptides(spectrum.tail,initialCandidates, possibleMasses).toList
+  class Candidate(val masses:List[Int]) {
+
+    def sum = masses.sum
+    def length = masses.length
+    def sliding(size:Int):Iterator[List[Int]] = masses.sliding(size)
+    def cyclicSliding(size:Int):Iterator[List[Int]] = masses.union(masses).sliding(size)//union(candidate).
+    def append(mass:Int):Candidate = new Candidate(masses :+ mass)
+    def asList = masses
   }
 
-  def possiblePeptides(spectrum:List[Int], candidates:GenSeq[List[Int]],possibleMasses:GenSeq[Int]):GenSeq[List[Int]] = {
+  def peptidesForSpectrum(spectrum:List[Int]):List[List[Int]] = {
+    val initialCandidates = originalMasses.map((firstMass:Int) => new Candidate(List(firstMass)))
+    possiblePeptides(spectrum.tail,initialCandidates).map(_.asList).toList
+  }
+
+  def possiblePeptides(spectrum:List[Int], candidates:GenSeq[Candidate]):GenSeq[Candidate] = {
     (for (candidate <- candidates.par)
-        yield peptidesForCandidate(spectrum,candidate,possibleMasses)).flatten
+        yield peptidesForCandidate(spectrum,candidate)).flatten
   }
 
-  def peptidesForCandidate(spectrum:List[Int],candidate:List[Int],possibleMasses:GenSeq[Int])= {
+  def peptidesForCandidate(spectrum:List[Int],candidate:Candidate)= {
       if (isSubspectrum(candidate,spectrum)) {
         if (isSpectrum(candidate,spectrum)) List(candidate)
-        else if (candidate.sum<spectrum.last) possiblePeptides(spectrum, possibleMasses.map((a:Int) => candidate :+ a),possibleMasses)
+        else if (candidate.sum<spectrum.last) possiblePeptides(spectrum, originalMasses.map((a:Int) => candidate.append(a)))
         else List()
       } else List()
 
