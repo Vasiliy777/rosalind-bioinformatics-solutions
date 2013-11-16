@@ -9,7 +9,7 @@ import scala.collection.mutable
 
 class SpectrumWithErrors_Imperative_Spec extends FlatSpec with Matchers with ReadFrom  {
 
-  def originalMasses = List(57, 71, 87, 97, 99, 101, 103, 113, 114, 115, 128, 129, 131, 137, 147, 156, 163, 186).par
+  def originalMasses = new Range.Inclusive(57,200,1).toList.par
 
   "Peptides" should "be found for spectrum with errors - example" in {
     val boardSize = 10
@@ -52,7 +52,7 @@ class SpectrumWithErrors_Imperative_Spec extends FlatSpec with Matchers with Rea
   }
 
   def calculateScore(candidate:List[Int],spectrum:List[Int]):Int = {
-    if (candidate.sum > spectrum.last) -1 else  spectrum.toSet.intersect((for (i <- 1 to candidate.length; combination <- candidate.sliding(i)) yield(combination.sum)).toSet).size
+    if (candidate.sum > spectrum.last) -1 else  spectrum.intersect((for (i <- 1 to candidate.length; combination <- candidate.union(candidate).sliding(i)) yield(combination.sum))).size
   }
 
   def candidatesForSpectrum(spectrum:List[Int],boardSize:Int):Seq[CandidateWithScore] = {
