@@ -31,13 +31,7 @@ class SpectralConvolutionSpec extends FlatSpec with Matchers with ReadFrom  {
   }
 
   def convolution(spectrum:List[Int]):Seq[Int] = {
-    
-    combinations(spectrum).map(pair => Math.abs(pair._1-pair._2)).filter(_>0)
+    new Convolution(spectrum).getAll
   }
-  
-  def combinations(spectrum:List[Int]):List[Pair[Int,Int]] = {
-    for (a <- spectrum.zipWithIndex; b <- spectrum.drop(a._2)) yield (a._1,b)
-  }
-
 
 }
