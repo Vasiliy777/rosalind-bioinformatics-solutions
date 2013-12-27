@@ -35,29 +35,8 @@ class DeBruijnGraphSpec extends FlatSpec with Matchers with ReadFrom {
   }
 
 
-  def createGraph(k:Int, genome:String) = {
-    val dummyGenome = genome + "X"
-    val simpleGraph = for (kmer <- genome.sliding(k,1); other <- dummyGenome.sliding(k,1).filterNot(_.equals(kmer)); if (kmer.drop(1).equals(other.dropRight(1))))
-      yield new Binding(kmer.dropRight(1),other.dropRight(1))
-    simpleGraph.toList.groupBy((a:Binding) => a.left).mapValues((bindingList) => bindingList.map(_.right).toSet.toList.sorted.mkString(",")).map((entry) => entry._1 + " -> " + entry._2)
-  }
+  def createGraph(k:Int, genome:String) = new DeBruijnGraph().createGraph(k,genome)
 
-  class Binding(val left:String,val right:String) {
-
-    def canEqual(other: Any): Boolean = other.isInstanceOf[Binding]
-
-    override def equals(other: Any): Boolean = other match {
-      case that: Binding =>
-        (that canEqual this) &&
-          right == that.right
-      case _ => false
-    }
-
-    override def hashCode(): Int = {
-      val state = Seq(right)
-      state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
-    }
-  }
 
 }
 
