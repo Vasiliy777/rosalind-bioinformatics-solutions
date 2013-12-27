@@ -11,4 +11,6 @@ trait ReadFrom {
 
   def readFrom(fileName: String) = scala.io.Source.fromFile(getClass.getClassLoader.getResource(fileName).toURI).mkString.trim.replaceAll("\n","")
 
+  def readAsList(fileName: String) = scala.io.Source.fromFile(getClass.getClassLoader.getResource(fileName).toURI).mkString.split("\n").map(_.trim)
+
 }
